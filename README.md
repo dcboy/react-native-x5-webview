@@ -3,11 +3,11 @@
 
 ## Getting started
 
-`$ npm install react-native-x5-web-view --save`
+`$ npm install react-native-x5-webview --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-x5-web-view`
+`$ react-native link react-native-x5-webview`
 
 ### Manual installation
 
@@ -19,18 +19,18 @@
   - Add `new RNX5WebViewPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
-  	include ':react-native-x5-web-view'
-  	project(':react-native-x5-web-view').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-x5-web-view/android')
+  	include ':react-native-x5-webview'
+  	project(':react-native-x5-webview').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-x5-web-view/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-x5-web-view')
+      compile project(':react-native-x5-webview')
   	```
 
 
 ## Usage
 ```javascript
-import RNX5WebView from 'react-native-x5-web-view';
+import RNX5WebView from 'react-native-x5-webview';
 
 // TODO: What to do with the module?
 RNX5WebView;
