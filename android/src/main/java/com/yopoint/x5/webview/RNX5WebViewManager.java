@@ -34,6 +34,7 @@ import com.facebook.react.views.webview.events.TopLoadingErrorEvent;
 import com.facebook.react.views.webview.events.TopLoadingFinishEvent;
 import com.facebook.react.views.webview.events.TopLoadingStartEvent;
 import com.facebook.react.views.webview.events.TopMessageEvent;
+import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.TbsListener;
@@ -305,6 +306,9 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
 
     WebViewCacheInterceptorInst.getInstance().init(builder);
 
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+    QbSdk.initTbsSettings(map);
     QbSdk.setDownloadWithoutWifi(true);
     QbSdk.setTbsListener(new TbsListener() {
       @Override
@@ -362,6 +366,7 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     settings.setDomStorageEnabled(true);
     settings.setAllowFileAccess(false);
     settings.setAllowContentAccess(false);
+    settings.setMixedContentMode(0);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowFileAccessFromFileURLs(false);
