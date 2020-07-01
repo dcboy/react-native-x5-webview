@@ -306,9 +306,9 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
 
     WebViewCacheInterceptorInst.getInstance().init(builder);
 
-    HashMap<String, Object> map = new HashMap<String, Object>();
-    map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
-    QbSdk.initTbsSettings(map);
+    // HashMap<String, Object> map = new HashMap<String, Object>();
+    // map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+    // QbSdk.initTbsSettings(map);
     QbSdk.setDownloadWithoutWifi(true);
     QbSdk.setTbsListener(new TbsListener() {
       @Override
@@ -336,6 +336,17 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
       @Override
       public void onCoreInitFinished() {
         Log.d(REACT_CLASS, " onCoreInitFinished");
+      }
+    });
+    QbSdk.preInit(reactContext, new QbSdk.PreInitCallback() {
+      @Override
+      public void onCoreInitFinished() {
+        Log.i(REACT_CLASS, "preInit onCoreInitFinished");
+      }
+
+      @Override
+      public void onViewInitFinished(boolean b) {
+        Log.i(REACT_CLASS, "preInit onViewInitFinished b=" + b);
       }
     });
 
@@ -379,6 +390,8 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     if (ReactBuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       WebView.setWebContentsDebuggingEnabled(true);
     }
+
+    webView.setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
 
     return webView;
   }
