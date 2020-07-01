@@ -58,6 +58,7 @@ import javax.annotation.Nullable;
 import ren.yale.android.cachewebviewlib.ResourceInterceptor;
 import ren.yale.android.cachewebviewlib.WebViewCacheInterceptor;
 import ren.yale.android.cachewebviewlib.WebViewCacheInterceptorInst;
+import ren.yale.android.cachewebviewlib.config.CacheExtensionConfig;
 
 public class RNX5WebViewManager extends SimpleViewManager<WebView> {
   private static final String REACT_CLASS = "RNX5WebView";
@@ -291,12 +292,17 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     builder.setCacheSize(1024*1024*200)//设置缓存大小，默认100M
             .setConnectTimeoutSecond(30)//设置http请求链接超时，默认20秒
             .setReadTimeoutSecond(30);//设置http请求链接读取超时，默认20秒
+
     builder.setResourceInterceptor(new ResourceInterceptor() {
       @Override
       public boolean interceptor(String url) {
         return true;
       }
     });
+
+    CacheExtensionConfig extension = new CacheExtensionConfig();
+    extension.removeExtension("html").removeExtension("htm");
+    builder.setCacheExtensionConfig(extension);
 
     WebViewCacheInterceptorInst.getInstance().
             init(builder);
@@ -357,12 +363,6 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     settings.setAllowFileAccess(false);
     settings.setAllowContentAccess(false);
 
-    Context ctx = webView.getContext();
-    settings.setAppCacheEnabled(true);
-    settings.setAppCacheMaxSize(1024 * 1024 * 200);
-    settings.setAppCachePath(ctx.getCacheDir().getAbsolutePath());
-    settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-    Log.d("react-native-x5", " setAppCachePath is " + ctx.getCacheDir().getAbsolutePath());
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowFileAccessFromFileURLs(false);
@@ -393,42 +393,6 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
   public void setAllowFileAccessFromFileURLs(WebView view, boolean allows) {
     view.getSettings().setAllowFileAccessFromFileURLs(allows);
   }
-
-  // @ReactProp(name = "cacheEnabled")
-  // public void setCacheEnabled(WebView view, boolean enabled) {
-  // if (enabled) {
-  // Context ctx = view.getContext();
-  // if (ctx != null) {
-  // view.getSettings().setAppCachePath(ctx.getCacheDir().getAbsolutePath());
-  // view.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-  // view.getSettings().setAppCacheEnabled(true);
-  // }
-  // } else {
-  // view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-  // view.getSettings().setAppCacheEnabled(false);
-  // }
-  // }
-
-  // @ReactProp(name = "cacheMode")
-  // public void setCacheMode(WebView view, String cacheModeString) {
-  // Integer cacheMode;
-  // switch (cacheModeString) {
-  // case "LOAD_CACHE_ONLY":
-  // cacheMode = WebSettings.LOAD_CACHE_ONLY;
-  // break;
-  // case "LOAD_CACHE_ELSE_NETWORK":
-  // cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK;
-  // break;
-  // case "LOAD_NO_CACHE":
-  // cacheMode = WebSettings.LOAD_NO_CACHE;
-  // break;
-  // case "LOAD_DEFAULT":
-  // default:
-  // cacheMode = WebSettings.LOAD_DEFAULT;
-  // break;
-  // }
-  // view.getSettings().setCacheMode(cacheMode);
-  // }
 
   @ReactProp(name = "androidHardwareAccelerationDisabled")
   public void setHardwareAccelerationDisabled(WebView view, boolean disabled) {
