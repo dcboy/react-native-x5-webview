@@ -147,14 +147,13 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     // WebViewCache Code
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-      return WebResourceResponseAdapter.adapter(WebViewCacheInterceptorInst.getInstance().
-              interceptRequest(WebResourceRequestAdapter.adapter(request)));
+      return WebResourceResponseAdapter.adapter(
+          WebViewCacheInterceptorInst.getInstance().interceptRequest(WebResourceRequestAdapter.adapter(request)));
     }
 
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView webView, String s) {
-      return WebResourceResponseAdapter.adapter(WebViewCacheInterceptorInst.getInstance().
-              interceptRequest(s));
+      return WebResourceResponseAdapter.adapter(WebViewCacheInterceptorInst.getInstance().interceptRequest(s));
     }
 
     @Override
@@ -287,11 +286,11 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
   }
 
   public RNX5WebViewManager(ReactContext reactContext) {
-    WebViewCacheInterceptor.Builder builder =  new WebViewCacheInterceptor.Builder(reactContext);
+    WebViewCacheInterceptor.Builder builder = new WebViewCacheInterceptor.Builder(reactContext);
 
-    builder.setCacheSize(1024*1024*200)//设置缓存大小，默认100M
-            .setConnectTimeoutSecond(30)//设置http请求链接超时，默认20秒
-            .setReadTimeoutSecond(30);//设置http请求链接读取超时，默认20秒
+    builder.setCacheSize(1024 * 1024 * 200)// 设置缓存大小，默认100M
+        .setConnectTimeoutSecond(30)// 设置http请求链接超时，默认20秒
+        .setReadTimeoutSecond(30);// 设置http请求链接读取超时，默认20秒
 
     builder.setResourceInterceptor(new ResourceInterceptor() {
       @Override
@@ -304,35 +303,35 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     extension.removeExtension("html").removeExtension("htm");
     builder.setCacheExtensionConfig(extension);
 
-    WebViewCacheInterceptorInst.getInstance().
-            init(builder);
+    WebViewCacheInterceptorInst.getInstance().init(builder);
 
+    QbSdk.setDownloadWithoutWifi(true);
     QbSdk.setTbsListener(new TbsListener() {
       @Override
       public void onDownloadFinish(int i) {
-        Log.d("react-native-x5", "onDownloadFinish");
+        Log.d(REACT_CLASS, "onDownloadFinish:" + i);
       }
 
       @Override
       public void onInstallFinish(int i) {
-        Log.d("react-native-x5", "onInstallFinish");
+        Log.d(REACT_CLASS, "onInstallFinish:" + i);
       }
 
       @Override
       public void onDownloadProgress(int i) {
-        Log.d("react-native-x5", "onDownloadProgress:" + i);
+        Log.d(REACT_CLASS, "onDownloadProgress:" + i);
       }
     });
 
     QbSdk.initX5Environment(reactContext, new QbSdk.PreInitCallback() {
       @Override
       public void onViewInitFinished(boolean arg0) {
-        Log.d("react-native-x5", " onViewInitFinished is " + arg0);
+        Log.d(REACT_CLASS, " onViewInitFinished is " + arg0);
       }
 
       @Override
       public void onCoreInitFinished() {
-        Log.d("react-native-x5", " onCoreInitFinished ");
+        Log.d(REACT_CLASS, " onCoreInitFinished");
       }
     });
 
@@ -345,6 +344,7 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
   @Override
   protected WebView createViewInstance(ThemedReactContext reactContext) {
     X5WeView webView = new X5WeView(reactContext);
+    Log.d(REACT_CLASS, "TBS Version:" + WebView.getTbsCoreVersion(reactContext));
 
     webView.setWebChromeClient(new WebChromeClient() {
       @Override
@@ -362,7 +362,6 @@ public class RNX5WebViewManager extends SimpleViewManager<WebView> {
     settings.setDomStorageEnabled(true);
     settings.setAllowFileAccess(false);
     settings.setAllowContentAccess(false);
-
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowFileAccessFromFileURLs(false);
